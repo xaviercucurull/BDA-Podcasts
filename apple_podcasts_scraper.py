@@ -121,10 +121,10 @@ if __name__ == "__main__":
         for genre_name, genre_url in genres.items():
             podcasts = get_podcasts_from_genre(genre_url, genre_name, debug=True)
         
-        # Save to output file
-        with open(OUT_FILE, 'a') as f:
-            write = csv.writer(f, delimiter=';')
-            write.writerows([[p, genre_name] for p in podcasts])
+            # Save to output file
+            with open(OUT_FILE, 'a') as f:
+                write = csv.writer(f, delimiter=';')
+                write.writerows([[p, genre_name] for p in podcasts])
 
     else:
         print('ERROR: Could not find genres!')
