@@ -107,7 +107,7 @@ def get_podcasts_from_genre(genre_url, genre="", debug=False):
 
 if __name__ == "__main__":    
     # Write header of output file
-    with open(OUT_FILE, 'w') as f:
+    with open(OUT_FILE, 'w', encoding='utf8') as f:
         write = csv.writer(f, delimiter=';')
         write.writerow(['Title', 'Genre'])
     
@@ -122,7 +122,7 @@ if __name__ == "__main__":
             podcasts = get_podcasts_from_genre(genre_url, genre_name, debug=True)
         
             # Save to output file
-            with open(OUT_FILE, 'a') as f:
+            with open(OUT_FILE, 'a', encoding='utf8') as f:
                 write = csv.writer(f, delimiter=';')
                 write.writerows([[p, genre_name] for p in podcasts])
 
@@ -130,4 +130,4 @@ if __name__ == "__main__":
         print('ERROR: Could not find genres!')
     
     end_time = time.time() - t0
-    print(f'[{datetime.now().strftime("%H:%M:%S")}] Processed finished in {time.strftime("%Hhour %Mmin", time.gmtime(end_time))}')
+    print(f'[{datetime.now().strftime("%H:%M:%S")}] Process finished in {time.strftime("%Hhour %Mmin", time.gmtime(end_time))}')
