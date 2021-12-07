@@ -7,6 +7,7 @@ import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 import config
 import json
+from datetime import datetime
 
 import pandas as pd
 
@@ -60,9 +61,14 @@ def get_show_episodes_info(episodes):
     """
     
     average_duration_min = np.mean([e['duration_min'] for e in episodes])
-    release_date = episodes[-1]['release_date']
-    last_date = episodes[0]['release_date']
-    date_precision = episodes[0]['release_date_precision']
+    try:
+        release_date = episodes[-1]['release_date']
+        last_date = episodes[0]['release_date']
+        date_precision = episodes[0]['release_date_precision']
+    except:
+        release_date = None
+        last_date = None
+        date_precision = None
         
     episodes_info = {'average_duration_min': average_duration_min, 'release_date': release_date,
                      'last_date': last_date, 'date_precision': date_precision}
@@ -127,7 +133,11 @@ def single_process_batch(b):
         process_show_name(s_name, s_list)
             
     return s_list
-                
+
+def json_dump(data):
+    with open('data/out_test.json', 'a') as f:
+        json.dump(data , f)
+        
 ##########################################################
 
 if __name__ == "__main__":    
@@ -138,6 +148,7 @@ if __name__ == "__main__":
     
     t0 = time.time()
     total_shows = []
+    total_shows = 0
     
     # Load list of Apple Podcasts
     with open(config.PODCASTS_FILE, 'r', encoding='utf8') as f:
@@ -147,22 +158,27 @@ if __name__ == "__main__":
         # For each Apple Podcast, search for podcast information in Spotify
         # Process list in batches
         
-        batch_size = 50
+        batch_size = 1000
         batch = []
         count = 0
         
-        total_batches = 2       # TODO remove
+        total_batches = 100       # TODO remove
         
         for row in reader:
             if total_batches:   # TODO remove
                 # Process batch
                 if count >= batch_size:
+                    print(f'[{datetime.now().strftime("%H:%M:%S")}] Processing batch. {total_batches-1} remaining...')
                     # single_process_batch(batch)
                     with Pool(10) as p:
                         batch_shows = p.map(process_show_name, batch)
                         flat_list = [item for sublist in batch_shows for item in sublist]
-                        total_shows.extend(flat_list)
+                        #total_shows.extend(flat_list)
+                        total_shows += len(flat_list)
+                        json_dump(flat_list)
 
+                    print(f'[{datetime.now().strftime("%H:%M:%S")}] {len(flat_list)} shows retrieved from batch of {batch_size}\n')
+                    
                     batch = []
                     count = 0
                     total_batches -= 1      # TODO remove
@@ -177,10 +193,8 @@ if __name__ == "__main__":
             with Pool(10) as p:
                 batch_shows = p.map(process_show_name, batch)
                 flat_list = [item for sublist in batch_shows for item in sublist]
-                total_shows.extend(flat_list)
+                #total_shows.extend(flat_list)
+                total_shows += len(flat_list)
         
     end_time = time.time() - t0
-    print(f'Processed {len(total_shows)} in {end_time:.2f} seconds')   
-
-    with open('data/out_test.json', 'w', encoding='utf8') as f:
-        json.dump(total_shows , f)
+    print(f'Processed in {end_time:.2f} seconds') 
