@@ -1,3 +1,12 @@
+"""
+Big Data Analytics (BDA)
+Master in Artificial Intelligence (UPC/URV)
+
+Final Project
+Author: Xavier Cucurull Salamero <xavier.cucurull@estudiantat.upc.edu>
+Course: 2021/2022
+"""
+
 import requests
 import time
 from bs4 import BeautifulSoup
@@ -70,14 +79,13 @@ def get_podcasts_from_genre(genre_url, genre="", debug=False):
     Args:
         genre_url (str): url of the genre podcast page.
         genre (str, optional): Name of the genre. Defaults to "".
-        debug (bool, optional): Print debug information. Defaults to None.
+        debug (bool, optional): Print debug information. Defaults to False.
 
     Returns:
         list: containing titles of podcasts
     """
     genre_podcasts = []
 
-    genre_url = 'https://podcasts.apple.com/es/genre/podcasts-arte/id1301'
     response = requests.get(genre_url)
     soup = BeautifulSoup(response.text, 'html.parser')
 
@@ -95,9 +103,8 @@ def get_podcasts_from_genre(genre_url, genre="", debug=False):
 
         while p <= last_page:
             new_podcasts, last_page = get_podcasts_from_page(genre_url, l, p)
-            p += 1
-
             genre_podcasts.extend(new_podcasts)
+            p += 1
 
         if debug:
             print(f'\tLetter {l}: {len(genre_podcasts) - old_len} podcasts ({p-1} pages)')
