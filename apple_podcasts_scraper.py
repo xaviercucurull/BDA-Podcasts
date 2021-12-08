@@ -1,8 +1,6 @@
 """
-Big Data Analytics (BDA)
-Master in Artificial Intelligence (UPC/URV)
+Apple Podcasts Scraper
 
-Final Project
 Author: Xavier Cucurull Salamero <xavier.cucurull@estudiantat.upc.edu>
 Course: 2021/2022
 """
