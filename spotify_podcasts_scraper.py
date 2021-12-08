@@ -5,6 +5,7 @@ Author: Xavier Cucurull Salamero <xavier.cucurull@estudiantat.upc.edu>
 Course: 2021/2022
 """
 
+import pymongo
 import numpy as np
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
@@ -97,7 +98,7 @@ class SpotifyScraper():
             dict: average_duration_min, first date, last date, date_precision
         """
         if len(episodes):
-            average_duration_min = np.mean([e['duration_min'] for e in episodes])
+            average_duration_min = round(np.mean([e['duration_min'] for e in episodes]), 2)
             release_date = episodes[-1]['release_date']
             last_date = episodes[0]['release_date']
             date_precision = episodes[0]['release_date_precision']
@@ -130,16 +131,15 @@ class SpotifyScraper():
         """
         r = self.sp.search(q=show_name, limit=limit, type='show', market='ES')
         
-        shows = [{'name': i['name'], 'publisher': i['publisher'],
+        shows = [{'name': i['name'], 'publisher': i['publisher'], 'explicit': i['explicit'],
                 'media_type': i['media_type'], 'id': i['id'], 'languages': i['languages'],
                 'total_episodes': i['total_episodes']} for i in r['shows']['items']]
         
         return shows
-
+    
     def process_show_name(self, show_name, max_shows=1):
-        """ From a given show name (from Apple podcasts),
-        search for shows in Spotify and extract relevant
-        information.
+        """ From a given show name (from Apple podcasts), search for shows in 
+        Spotify and extract relevant information.
 
         Args:
             show_name (str): name of the show to search for
