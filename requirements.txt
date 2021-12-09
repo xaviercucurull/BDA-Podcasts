@@ -2,3 +2,4 @@ beautifulsoup4
 spotipy
 requests
 pymongo
+numpy
