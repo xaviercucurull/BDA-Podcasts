@@ -65,16 +65,16 @@ if __name__ == "__main__":
         
         batch_size = config.BATCH_SIZE
         names_batch = []
-        count = 0
-        
-        total_batches = np.inf      # Process ALL batches   
+        count_batches = 0
+        total_batches = np.inf      # Process ALL batches
         
         for row in reader:
             if total_batches:
                 # Process batch
                 if len(names_batch) >= batch_size:
                     # Print debug info
-                    print(f'[{datetime.now().strftime("%H:%M:%S")}] Processing batch. {total_batches-1} remaining...')
+                    count_batches += 1
+                    print(f'[{datetime.now().strftime("%H:%M:%S")}] Processing batch {count_batches}. {total_batches-1} remaining...')
                     
                     # Process Show Names using multiprocessing
                     with Pool(config.POOL_PROCESSES) as p:
@@ -96,6 +96,8 @@ if __name__ == "__main__":
                         
         # Process last batch
         if names_batch:
+            # Print debug info
+            print(f'[{datetime.now().strftime("%H:%M:%S")}] Processing last batch...')
 
             # Process Show Names using multiprocessing
             with Pool(config.POOL_PROCESSES) as p:
