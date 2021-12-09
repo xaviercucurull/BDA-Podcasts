@@ -19,14 +19,14 @@ import config
 from spotify_podcasts_scraper import SpotifyScraper
 
 
-def insert_list_into_database(dict_list, database):
+def insert_list_into_database(database, dict_list):
     """ Insert list of dicts into a MongoDB database.
     If a duplicate element tries to be inserted it is ignored
     and the insertion continues.
 
     Args:
-        dict_list (list): list of dictionaries
         database (MongoDB database): MongoDB database
+        dict_list (list): list of dictionaries
     """
     if len(dict_list):
         # Insert many bypassing duplicates (https://stackoverflow.com/a/63655698)
