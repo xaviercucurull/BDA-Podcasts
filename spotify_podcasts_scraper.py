@@ -5,8 +5,8 @@ Author: Xavier Cucurull Salamero <xavier.cucurull@estudiantat.upc.edu>
 Course: 2021/2022
 """
 
-import pymongo
 import numpy as np
+import pymongo
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 
@@ -133,7 +133,7 @@ class SpotifyScraper():
         
         shows = [{'name': i['name'], 'publisher': i['publisher'], 'explicit': i['explicit'],
                 'media_type': i['media_type'], 'id': i['id'], 'languages': i['languages'],
-                'total_episodes': i['total_episodes']} for i in r['shows']['items']]
+                'description': i['description'], 'total_episodes': i['total_episodes']} for i in r['shows']['items']]
         
         return shows
     
