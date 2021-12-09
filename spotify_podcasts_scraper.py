@@ -32,7 +32,29 @@ class SpotifyScraper():
         auth_manager = SpotifyClientCredentials(client_id, client_secret)
         self.sp = spotipy.Spotify(auth_manager=auth_manager)
         
-        
+    def _get_date_dict(self, date_string):
+        """ Get date dictionary from the date string obtained using
+        Spotify's API.
+
+        Args:
+            date_string (str): date string from Spotify API.
+                               Depending on the precision, it might be shown as "1981",  
+                               "1981-12" or "1981-12-15"
+
+        Returns:
+            dict: date dict with the keys 'year', 'month', day'
+        """
+        date_list = date_string.split("-")
+
+        if len(date_list) == 3:
+            date =  {'year': int(date_list[0]), 'month': int(date_list[1]), 'day': int(date_list[2]})
+        elif len(date_list) == 2:
+            date =  {'year': int(date_list[0]), 'month': int(date_list[1]), 'day': None}
+        else:
+            date =  {'year': int(date_list[0]), 'month': None, 'day': None}
+
+        return date
+
     def get_show_episodes(self, show_id, all=True):
         """ Get list of all episodes corresponding to a given show.
 
@@ -98,14 +120,14 @@ class SpotifyScraper():
         """
         if len(episodes):
             average_duration_min = round(np.mean([e['duration_min'] for e in episodes]), 2)
-            release_date = episodes[-1]['release_date']
-            last_date = episodes[0]['release_date']
-            date_precision = episodes[0]['release_date_precision']
+            release_date = self._get_date_dict(episodes[-1]['release_date'])
+            last_date = self._get_date_dict(episodes[0]['release_date'])
+            date_precision = episodes[-1]['release_date_precision']
             
         else:
             average_duration_min = None
-            release_date = None
-            last_date = None
+            release_date = {'year': None, 'month': None, 'day': None}
+            last_date = {'year': None, 'month': None, 'day': None}
             date_precision = None
             
         episodes_info = {'average_duration_min': average_duration_min, 'release_date': release_date,
