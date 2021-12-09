@@ -32,7 +32,7 @@ def insert_list_into_database(database, dict_list):
         # Insert many bypassing duplicates (https://stackoverflow.com/a/63655698)
         try:
             # inserts new documents even on error
-            database.podcasts.insert_many(dict_list, ordered=False, bypass_document_validation=True)
+            database[config.COLLECTION_NAME].insert_many(dict_list, ordered=False, bypass_document_validation=True)
         except pymongo.errors.BulkWriteError as e:
             panic_list = list(filter(lambda x: x['code'] != 11000, e.details['writeErrors']))
             if len(panic_list) > 0:
@@ -46,10 +46,10 @@ if __name__ == "__main__":
     
     # Get MongoDB database
     client = pymongo.MongoClient('localhost', 27017, username='mongoadmin', password='pass1234')
-    db = client['finalproject']
+    db = client[config.DATABASE_NAME]
     
     # Create Podcasts collection with id as unique index
-    db.podcasts.create_index([('id', pymongo.ASCENDING)], unique=True)
+    db[config.COLLECTION_NAME].create_index([('id', pymongo.ASCENDING)], unique=True)
 
     t0 = time.time()
     total_shows = []
