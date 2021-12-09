@@ -31,7 +31,7 @@ class SpotifyScraper():
     def __init__(self, client_id, client_secret):
         # Configure Spotify Client using spotipy
         auth_manager = SpotifyClientCredentials(client_id, client_secret)
-        self.sp = spotipy.Spotify(auth_manager=auth_manager)
+        self.sp = spotipy.Spotify(auth_manager=auth_manager, requests_timeout=10, retries=10, status_retries=10)
         
     def _get_date_dict(self, date_string):
         """ Get date dictionary from the date string obtained using
@@ -55,33 +55,6 @@ class SpotifyScraper():
             date =  {'year': int(date_list[0]), 'month': None, 'day': None}
 
         return date
-
-    def show_episodes_retry(self, show_id, limit, offset, market, n_retries=10):
-        """ Calls spotipy's show_episodes and performs retries on
-        ReadTimeout exceptions.
-
-        Args:
-            show_id (str): Spotify API call show ID
-            limit (int): Spotify API call limit
-            offset (int): Spotify API call offset
-            market (str): Spotify API call market
-
-        Returns:
-            response: query response
-        """
-        r = None
-
-        while n_retries:
-            try:
-                r = self.sp.show_episodes(show_id, limit=limit, offset=offset, market=market)
-                n_retries = 0
-            except Exception as e:
-                print(f'{e}. Attempting retry in 5s...')
-                time.sleep(5)
-                n_retries -= 1
-
-        return r
-
 
     def get_show_episodes(self, show_id, all=True):
         """ Get list of all episodes corresponding to a given show.
@@ -107,7 +80,7 @@ class SpotifyScraper():
         if all:
             # While loop to run with conditional variables
             while((offset <= max_offset-limit) & (counter <= more_runs)):           
-                r = self.show_episodes_retry(show_id, limit=limit, offset=offset, market='ES')
+                r = self.sp.show_episodes(show_id, limit=limit, offset=offset, market='ES')
                 
                 more_runs = (r['total'] // limit )      # how many more runs of "limit" are needed?       
                     
@@ -121,7 +94,7 @@ class SpotifyScraper():
         # Get batches containing first and last episodes
         else:
             # Get last episodes
-            r = self.show_episodes_retry(show_id, limit=limit, offset=offset, market='ES')
+            r = self.sp.show_episodes(show_id, limit=limit, offset=offset, market='ES')
             episodes.extend([{'episode_name': i['name'], 'duration_min': i['duration_ms']/60000,
                                 'languages': i['languages'], 'release_date': i['release_date'], 
                                 'release_date_precision': i['release_date_precision']} for i in r['items']])
@@ -129,7 +102,7 @@ class SpotifyScraper():
             # Get first episodes
             if r['total'] > limit:
                 offset = r['total'] - limit
-                r = self.show_episodes_retry(show_id, limit=limit, offset=offset, market='ES')
+                r = self.sp.show_episodes(show_id, limit=limit, offset=offset, market='ES')
                 episodes.extend([{'episode_name': i['name'], 'duration_min': i['duration_ms']/60000,
                                     'languages': i['languages'], 'release_date': i['release_date'], 
                                     'release_date_precision': i['release_date_precision']} for i in r['items']])
