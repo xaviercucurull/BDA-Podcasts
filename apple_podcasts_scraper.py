@@ -5,12 +5,12 @@ Author: Xavier Cucurull Salamero <xavier.cucurull@estudiantat.upc.edu>
 Course: 2021/2022
 """
 
-import requests
-import time
-from bs4 import BeautifulSoup
+import csv
 import time
 from datetime import datetime
-import csv
+
+import requests
+from bs4 import BeautifulSoup
 
 OUT_FILE = "data/apple_podcasts.csv"
     
@@ -127,7 +127,7 @@ if __name__ == "__main__":
             podcasts = get_podcasts_from_genre(genre_url, genre_name, debug=True)
         
             # Save to output file
-            with open(OUT_FILE, 'a', encoding='utf8') as f:
+            with open(OUT_FILE, 'a', encoding='utf8', newline='\n') as f:
                 write = csv.writer(f, delimiter=';')
                 write.writerows([[p, genre_name] for p in podcasts])
 

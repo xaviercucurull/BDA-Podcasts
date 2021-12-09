@@ -6,7 +6,6 @@ Course: 2021/2022
 """
 
 import numpy as np
-import pymongo
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 
@@ -149,9 +148,7 @@ class SpotifyScraper():
             list: of dicts containing show information
         """
         shows = self.search_shows(show_name)
-        
-        # TODO: check that show is new
-        
+                
         show_list = []
         
         for s in shows:
