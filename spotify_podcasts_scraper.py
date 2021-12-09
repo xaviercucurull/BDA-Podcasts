@@ -47,7 +47,7 @@ class SpotifyScraper():
         date_list = date_string.split("-")
 
         if len(date_list) == 3:
-            date =  {'year': int(date_list[0]), 'month': int(date_list[1]), 'day': int(date_list[2]})
+            date =  {'year': int(date_list[0]), 'month': int(date_list[1]), 'day': int(date_list[2])}
         elif len(date_list) == 2:
             date =  {'year': int(date_list[0]), 'month': int(date_list[1]), 'day': None}
         else:
