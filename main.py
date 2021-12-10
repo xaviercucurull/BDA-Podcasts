@@ -65,34 +65,46 @@ if __name__ == "__main__":
         
         batch_size = config.BATCH_SIZE
         names_batch = []
-        count_batches = 0
+        count_batches = 1
         total_batches = np.inf      # Process ALL batches
         
         for row in reader:
-            if total_batches:
-                # Process batch
-                if len(names_batch) >= batch_size:
-                    # Print debug info
-                    count_batches += 1
-                    print(f'[{datetime.now().strftime("%H:%M:%S")}] Processing batch {count_batches}. {total_batches-1} remaining...')
-                    
-                    # Process Show Names using multiprocessing
-                    with Pool(config.POOL_PROCESSES) as p:
-                        batch_shows = p.map(sp.process_show_name, names_batch, config.MAX_SHOWS_PER_SEARCH)
-                        shows_list = [item for sublist in batch_shows for item in sublist]      # flatten list
+            if count_batches > config.OFFSET:
+                if total_batches:
+                    # Process batch
+                    if len(names_batch) >= batch_size:
+                        # Print debug info
+                        print(f'[{datetime.now().strftime("%H:%M:%S")}] Processing batch {count_batches}. {total_batches-1} remaining...')
                         
-                    # Insert shows into database
-                    insert_list_into_database(db, shows_list)
+                        # Process Show Names using multiprocessing
+                        with Pool(config.POOL_PROCESSES) as p:
+                            batch_shows = p.map(sp.process_show_name, names_batch, config.MAX_SHOWS_PER_SEARCH)
+                            shows_list = [item for sublist in batch_shows for item in sublist]      # flatten list
+                            
+                        # Insert shows into database
+                        insert_list_into_database(db, shows_list)
+                            
+                        # Print debug info
+                        print(f'[{datetime.now().strftime("%H:%M:%S")}] {len(shows_list)} shows retrieved from batch of {len(names_batch)}\n')
                         
-                    # Print debug info
-                    print(f'[{datetime.now().strftime("%H:%M:%S")}] {len(shows_list)} shows retrieved from batch of {len(names_batch)}\n')
-                    
-                    # Reset batch
-                    names_batch = []
-                    total_batches -= 1
+                        # Reset batch
+                        names_batch = []
 
+                        # Update counters
+                        count_batches += 1
+                        total_batches -= 1
+
+                    # Add row to batch
+                    names_batch.append(row[0])
+
+            else:
                 # Add row to batch
                 names_batch.append(row[0])
+
+                if len(names_batch) >= batch_size:
+                    # Increase batch counter and reset batch
+                    count_batches += 1
+                    names_batch = []
                         
         # Process last batch
         if names_batch:

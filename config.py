@@ -9,6 +9,7 @@ PODCASTS_FILE = 'data/apple_podcasts.csv'
 
 MAX_SHOWS_PER_SEARCH = 10
 BATCH_SIZE = 1000
+OFFSET = 51                         # Batches to skip from processing
 POOL_PROCESSES = 5
 
 DATABASE_NAME = 'finalproject'      # Name of the MongoDB database

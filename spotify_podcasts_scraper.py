@@ -31,7 +31,7 @@ class SpotifyScraper():
     def __init__(self, client_id, client_secret):
         # Configure Spotify Client using spotipy
         auth_manager = SpotifyClientCredentials(client_id, client_secret)
-        self.sp = spotipy.Spotify(auth_manager=auth_manager, requests_timeout=10, retries=10, status_retries=10)
+        self.sp = spotipy.Spotify(auth_manager=auth_manager, requests_timeout=15, retries=10, status_retries=10)
         
     def _get_date_dict(self, date_string):
         """ Get date dictionary from the date string obtained using
