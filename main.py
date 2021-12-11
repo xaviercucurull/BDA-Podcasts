@@ -55,26 +55,29 @@ if __name__ == "__main__":
     total_shows = []
     total_shows = 0
     
-    # Load list of Apple Podcasts
+    # Load list of Apple Podcasts to get the number of podcasts
+    with open(config.PODCASTS_FILE, 'r', encoding='utf8') as f:        
+        num_apple_podcasts = sum(1 for line in f) - 1
+        total_batches = num_apple_podcasts // config.BATCH_SIZE + 1
+        batches_to_process = total_batches - config.OFFSET
+
+    # Load list of Apple Podcasts to start processing
     with open(config.PODCASTS_FILE, 'r', encoding='utf8') as f:
         reader = csv.reader(f, delimiter=';')
         header = next(reader)   # skip header
 
         # For each Apple Podcast, search for podcast information in Spotify
         # Process list in batches
-        
-        batch_size = config.BATCH_SIZE
         names_batch = []
         count_batches = 1
-        total_batches = np.inf      # Process ALL batches
         
         for row in reader:
             if count_batches > config.OFFSET:
-                if total_batches:
+                if batches_to_process:
                     # Process batch
-                    if len(names_batch) >= batch_size:
+                    if len(names_batch) >= config.BATCH_SIZE:
                         # Print debug info
-                        print(f'[{datetime.now().strftime("%H:%M:%S")}] Processing batch {count_batches}. {total_batches-1} remaining...')
+                        print(f'[{datetime.now().strftime("%H:%M:%S")}] Processing batch {count_batches}. {batches_to_process-1} remaining...')
                         
                         # Process Show Names using multiprocessing
                         with Pool(config.POOL_PROCESSES) as p:
@@ -92,7 +95,7 @@ if __name__ == "__main__":
 
                         # Update counters
                         count_batches += 1
-                        total_batches -= 1
+                        batches_to_process -= 1
 
                     # Add row to batch
                     names_batch.append(row[0])
@@ -101,7 +104,7 @@ if __name__ == "__main__":
                 # Add row to batch
                 names_batch.append(row[0])
 
-                if len(names_batch) >= batch_size:
+                if len(names_batch) >= config.BATCH_SIZE:
                     # Increase batch counter and reset batch
                     count_batches += 1
                     names_batch = []
