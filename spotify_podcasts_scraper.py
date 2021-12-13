@@ -68,10 +68,17 @@ class SpotifyScraper():
         Returns:
             tuple: containing episodes_list and total number of episodes
         """
-        r = self.sp.show_episodes(show_id, limit=limit, offset=offset, market=market)
-        episodes_list =[{'episode_name': i['name'], 'duration_min': i['duration_ms']/60000,
-                        'languages': i['languages'], 'release_date': i['release_date'], 
-                        'release_date_precision': i['release_date_precision']} for i in r['items']]
+        retry = True
+
+        while retry:
+            try:
+                r = self.sp.show_episodes(show_id, limit=limit, offset=offset, market=market)
+                episodes_list =[{'episode_name': i['name'], 'duration_min': i['duration_ms']/60000,
+                                'languages': i['languages'], 'release_date': i['release_date'], 
+                                'release_date_precision': i['release_date_precision']} for i in r['items']]
+                retry = False
+            except:
+                time.sleep(30)
 
         return episodes_list, r['total']
 
@@ -164,12 +171,18 @@ class SpotifyScraper():
         Returns:
             list: of shows
         """
-        r = self.sp.search(q=show_name, limit=limit, type='show', market='ES')
+        retry = True
         
-        shows = [{'name': i['name'], 'publisher': i['publisher'], 'explicit': i['explicit'],
-                'media_type': i['media_type'], 'id': i['id'], 'languages': i['languages'],
-                'description': i['description'], 'total_episodes': i['total_episodes']} for i in r['shows']['items']]
-        
+        while retry:
+            try:
+                r = self.sp.search(q=show_name, limit=limit, type='show', market='ES')
+                shows = [{'name': i['name'], 'publisher': i['publisher'], 'explicit': i['explicit'],
+                        'media_type': i['media_type'], 'id': i['id'], 'languages': i['languages'],
+                        'description': i['description'], 'total_episodes': i['total_episodes']} for i in r['shows']['items']]
+                retry = False
+            except:
+                time.sleep(30)
+                
         return shows
     
     def process_show_name(self, show_name, max_shows=1):
