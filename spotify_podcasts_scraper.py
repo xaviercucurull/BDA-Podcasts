@@ -10,9 +10,6 @@ import numpy as np
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 
-# https://developer.spotify.com/documentation/web-api/reference/#/operations/search
-# https://medium.com/analytics-vidhya/visualizing-spotify-podcast-data-6dce49ca9a43
-# https://medium.datadriveninvestor.com/speed-up-web-scraping-using-multiprocessing-in-python-af434ff310c5
 
 class SpotifyScraper():
     """ Implementation of a Spotify Podcasts Scraper using Spotipy.
@@ -78,6 +75,7 @@ class SpotifyScraper():
                                 'release_date_precision': i['release_date_precision']} for i in r['items']]
                 retry = False
             except:
+                print('Spotipy show_episodes error! Retrying in 30s...')
                 time.sleep(30)
 
         return episodes_list, r['total']
@@ -181,6 +179,7 @@ class SpotifyScraper():
                         'description': i['description'], 'total_episodes': i['total_episodes']} for i in r['shows']['items']]
                 retry = False
             except:
+                print('Spotipy search error! Retrying in 30s...')
                 time.sleep(30)
                 
         return shows

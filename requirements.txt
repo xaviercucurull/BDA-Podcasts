@@ -3,3 +3,6 @@ spotipy
 requests
 pymongo
 numpy
+seaborn
+matplotlib
+jupyterlab

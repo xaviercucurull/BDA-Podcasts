@@ -7,12 +7,10 @@ Author: Xavier Cucurull Salamero <xavier.cucurull@estudiantat.upc.edu>
 Course: 2021/2022
 """
 import csv
-import json
 import time
 from datetime import datetime
 from multiprocessing import Pool
 
-import numpy as np
 import pymongo
 
 import config

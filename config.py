@@ -7,9 +7,9 @@ SPOTIPY_CLIENT_SECRET ='4f31f73ce5934fafa4914d9a4b3d37bb'   # Your spotify Clien
 
 PODCASTS_FILE = 'data/apple_podcasts.csv'
 
-MAX_SHOWS_PER_SEARCH = 10
+MAX_SHOWS_PER_SEARCH = 5
 BATCH_SIZE = 1000
-OFFSET = 51                         # Batches to skip from processing
+OFFSET = 0                          # Batches to skip from processing
 POOL_PROCESSES = 5
 
 DATABASE_NAME = 'finalproject'      # Name of the MongoDB database
