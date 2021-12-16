@@ -3,7 +3,7 @@ MAI - Big Data Analytics Final Project
 
 Podcasts analysis using Spotify developer API
   <!-- Getting started colab -->
-  <a href="https://colab.research.google.com/github/facebookresearch/CompilerGym/blob/stable/examples/getting-started.ipynb">
+  <a href="https://colab.research.google.com/github/xaviercucurull/BDA-Podcasts/blob/main/BDA_Final_Project.ipynb">
       <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Colab" height="20">
   </a>
 
