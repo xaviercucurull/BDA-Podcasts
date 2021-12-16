@@ -22,4 +22,4 @@ Podcasts analysis using Spotify developer API
 ```
 
 ## Database download
-The Podcasts Database constructed for this project can also be downloaded [here]().
+The Podcasts Database constructed for this project can also be downloaded [here](https://drive.google.com/file/d/1sX5JTAqtWuOeFYqJr-ih8VvcjP6tFRPC/view?usp=sharing).
