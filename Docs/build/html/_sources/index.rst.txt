@@ -23,3 +23,5 @@ How to build the database
    python build_database.py
 
 
+:ref:`modindex`
+===============
