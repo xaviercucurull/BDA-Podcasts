@@ -2,3 +2,24 @@
 MAI - Big Data Analytics Final Project
 
 Podcasts analysis using Spotify developer API
+  <!-- Getting started colab -->
+  <a href="https://colab.research.google.com/github/facebookresearch/CompilerGym/blob/stable/examples/getting-started.ipynb">
+      <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Colab" height="20">
+  </a>
+
+## How to build the database
+
+1. Navigate to the *Root* directory.
+2. Install the necessary packages.(it is recommended to use a virtual environment).
+3. Scrape Apple Podcasts to get a list of show names.
+4. Build the database
+
+```
+   cd BDA-Podcasts
+   pip install requirements.txt
+   python apple_podcasts_scraper.python
+   python build_database.py
+```
+
+## Database download
+The Podcasts Database constructed for this project can also be downloaded [here]().
