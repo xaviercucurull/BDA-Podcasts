@@ -1,6 +1,9 @@
 """
 Spotify Podcasts Scraper
 
+Class that uses the Spotipy package, which wraps the Spotify
+Web API. Can be used to extract shows and episodes from Spotify.
+
 Author: Xavier Cucurull Salamero <xavier.cucurull@estudiantat.upc.edu>
 Course: 2021/2022
 """

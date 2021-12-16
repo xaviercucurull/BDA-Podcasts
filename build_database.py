@@ -37,7 +37,7 @@ def insert_list_into_database(database, dict_list):
                 print(f"these are not duplicate errors {panic_list}")
 
 
-if __name__ == "__main__":    
+if __name__ == "__main__":
 
     # Configure Spotify Client using spotipy
     sp = SpotifyScraper(config.SPOTIPY_CLIENT_ID, config.SPOTIPY_CLIENT_SECRET)
