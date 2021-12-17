@@ -1,7 +1,7 @@
 # BDA-Podcasts
 MAI - Big Data Analytics Final Project
 
-Podcasts analysis using the Spotify developer API
+Podcasts analysis from a database created using the Spotify developer API
 
 <!-- Getting started colab -->
 <a href="https://colab.research.google.com/github/xaviercucurull/BDA-Podcasts/blob/main/BDA_Final_Project.ipynb">
