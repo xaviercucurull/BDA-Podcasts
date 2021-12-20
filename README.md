@@ -3,7 +3,7 @@ MAI - Big Data Analytics Final Project
 
 Podcasts analysis from a database created using the Spotify developer API
 
-<!-- Getting started colab -->
+<!-- Open in colab -->
 <a href="https://colab.research.google.com/github/xaviercucurull/BDA-Podcasts/blob/main/BDA_Final_Project.ipynb">
     <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Colab" height="20">
 </a>
